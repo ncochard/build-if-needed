@@ -1,6 +1,6 @@
 {
   "name": "build-if-needed",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Build your code, only if you need to...",
   "main": "dist/index.js",
   "scripts": {
