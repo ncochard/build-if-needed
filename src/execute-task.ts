@@ -1,23 +1,20 @@
 import * as execa from "execa";
 import { CommandOptions, CommandResult, Configuration } from "./types";
-import { projectName } from "./constants";
+import { error, info } from "./feedback";
 
 export async function executeCommand(
   config: Configuration,
   command: CommandOptions
 ): Promise<CommandResult> {
+  const cmd = `${config.command} run ${command.script}`;
+  info(`Executing "${cmd}"`);
   const subprocess = execa(config.command, ["run", command.script]);
   if (!subprocess) {
-    console.error(
-      `${projectName}: Could not start the process "${config.command} run ${command.script}"`
-    );
+    error(`Could not start "${cmd}"`);
+    return { success: false };
   }
-  if (subprocess.stdout) {
-    subprocess.stdout.pipe(process.stdout);
-  }
-  if (subprocess.stderr) {
-    subprocess.stderr.pipe(process.stderr);
-  }
+  subprocess.stdout?.pipe(process.stdout);
+  subprocess.stderr?.pipe(process.stderr);
   const kill = (): void => {
     subprocess.kill("SIGTERM", {
       forceKillAfterTimeout: 2000,
@@ -26,15 +23,16 @@ export async function executeCommand(
   process.on("SIGTERM", kill);
   try {
     const result = await subprocess;
-    console.info(
-      `${projectName}: Command terminated successfully with code ${result.exitCode}: "${config.command} run ${command.script}"`
-    );
+    info(`Completed successfully: "${cmd}"`);
     return { success: true, exitCode: result.exitCode };
   } catch (e) {
-    console.error(
-      `${projectName}: Command terminated with error code ${e.code}: "${config.command} run ${command.script}"`
-    );
-    return { success: false, exitCode: e.code };
+    if (e.code) {
+      error(`Terminated with error ${e.code}: "${cmd}"`);
+      return { success: false };
+    } else {
+      error(`Terminated with error: "${cmd}"`);
+      return { success: false, exitCode: e.code };
+    }
   } finally {
     process.off("SIGTERM", kill);
   }

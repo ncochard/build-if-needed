@@ -1,6 +1,6 @@
 import { CommandOptions } from "./types";
+import { error } from "./feedback";
 import { program } from "commander";
-import { projectName } from "./constants";
 
 export async function getCommand(): Promise<CommandOptions> {
   await Promise.resolve();
@@ -13,7 +13,7 @@ export async function getCommand(): Promise<CommandOptions> {
   const script = `${program.script}`;
   const debug: boolean = program.debug === true;
   if (!script) {
-    console.error(`${projectName} Missing --script parameter`);
+    error(`Missing --script parameter`);
   }
   return { script, debug };
 }

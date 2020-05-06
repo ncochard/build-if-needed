@@ -3,8 +3,8 @@ import { executeCommand } from "./execute-task";
 import { findFiles } from "./file-system";
 import { getCommand } from "./command";
 import { getConfiguration } from "./configuration";
+import { info } from "./feedback";
 import { loadHashes } from "./hashes-cache";
-import { projectName } from "./constants";
 import { same } from "./utility";
 import { updateCache } from "./after-task";
 
@@ -17,14 +17,12 @@ async function main(): Promise<void> {
   const output = getHashForFiles(await outputFiles);
   const newHashes = { input: await input, output: await output };
   const lastHashes = await loadHashes({ script });
+  const cmd = `${config.command} run ${script}`;
   if (same(newHashes, lastHashes)) {
-    console.info(
-      `${projectName}: Skipped: \"${config.command} run ${script}\"! The ${hashAlgorithm} hash stored by \"build-if-needed\" indicates that nothing needs to be built.`
+    info(
+      `Skipped: "${cmd}"! The ${hashAlgorithm} hash stored by \"build-if-needed\" indicates that nothing needs to be built.`
     );
   } else {
-    console.info(
-      `${projectName}: Executing \"${config.command} run ${script}\"`
-    );
     const { success, exitCode } = await executeCommand(config, {
       script,
       debug,
@@ -32,7 +30,7 @@ async function main(): Promise<void> {
     if (success) {
       await updateCache();
     } else {
-      process.exit(exitCode);
+      process.exit(exitCode || 1);
     }
   }
 }

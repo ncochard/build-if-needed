@@ -4,7 +4,7 @@ export enum Commands {
 }
 export interface CommandResult {
   success: boolean;
-  exitCode: number;
+  exitCode?: number;
 }
 
 export interface Configuration {
