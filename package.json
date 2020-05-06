@@ -1,6 +1,6 @@
 {
   "name": "build-if-needed",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build your code, only if you need to...",
   "main": "dist/index.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "chalk": "^4.0.0",
     "commander": "^5.1.0",
     "cosmiconfig": "^6.0.0",
     "execa": "^4.0.0",
