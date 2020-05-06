@@ -1,6 +1,8 @@
 import * as execa from "execa";
 import { CommandOptions, CommandResult, Configuration } from "./types";
-import { error, info } from "./feedback";
+import { debug, error, info } from "./feedback";
+
+const SIGTERM = "SIGTERM";
 
 export async function executeCommand(
   config: Configuration,
@@ -16,11 +18,12 @@ export async function executeCommand(
   subprocess.stdout?.pipe(process.stdout);
   subprocess.stderr?.pipe(process.stderr);
   const kill = (): void => {
-    subprocess.kill("SIGTERM", {
+    debug(`Killed command ${SIGTERM}: "${cmd}"`);
+    subprocess.kill(SIGTERM, {
       forceKillAfterTimeout: 2000,
     });
   };
-  process.on("SIGTERM", kill);
+  process.on(SIGTERM, kill);
   try {
     const result = await subprocess;
     info(`Completed successfully: "${cmd}"`);
@@ -34,6 +37,6 @@ export async function executeCommand(
       return { success: false, exitCode: e.code };
     }
   } finally {
-    process.off("SIGTERM", kill);
+    process.off(SIGTERM, kill);
   }
 }

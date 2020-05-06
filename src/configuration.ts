@@ -3,6 +3,8 @@ import { cosmiconfig } from "cosmiconfig";
 import { error } from "./feedback";
 import { projectName } from "./constants";
 
+const defaultGlobs = ["package.json"];
+
 export async function getConfiguration(script: string): Promise<Configuration> {
   const explorerSync = cosmiconfig(projectName);
   const configResult = await explorerSync.search();
@@ -19,9 +21,11 @@ export async function getConfiguration(script: string): Promise<Configuration> {
   }
   const command =
     result.command === Commands.yarn ? Commands.yarn : Commands.npm;
+  const input = result.input || [];
+  const output = result.output || [];
   return {
-    input: result.input || [],
-    output: result.output || [],
+    input: [...defaultGlobs, ...input],
+    output: [...defaultGlobs, ...output],
     command,
   };
 }

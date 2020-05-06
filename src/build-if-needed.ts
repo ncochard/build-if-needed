@@ -1,9 +1,9 @@
-import { getHashForFiles, hashAlgorithm } from "./get-hash";
+import { error, info } from "./feedback";
+import { getHashForConfig, hashAlgorithm } from "./get-hash";
 import { executeCommand } from "./execute-task";
-import { findFiles } from "./file-system";
+import { findFilesForConfig } from "./file-system";
 import { getCommand } from "./command";
 import { getConfiguration } from "./configuration";
-import { info } from "./feedback";
 import { loadHashes } from "./hashes-cache";
 import { same } from "./utility";
 import { updateCache } from "./after-task";
@@ -11,16 +11,13 @@ import { updateCache } from "./after-task";
 async function main(): Promise<void> {
   const { script, debug } = await getCommand();
   const config = await getConfiguration(script);
-  const inputFiles = findFiles(config.input);
-  const outputFiles = findFiles(config.output);
-  const input = getHashForFiles(await inputFiles);
-  const output = getHashForFiles(await outputFiles);
-  const newHashes = { input: await input, output: await output };
+  const files = findFilesForConfig(config);
+  const newHashes = await getHashForConfig(await files, { debug });
   const lastHashes = await loadHashes({ script });
   const cmd = `${config.command} run ${script}`;
   if (same(newHashes, lastHashes)) {
     info(
-      `Skipped: "${cmd}"! The ${hashAlgorithm} hash stored by \"build-if-needed\" indicates that nothing needs to be built.`
+      `The stored ${hashAlgorithm} indicates that "${cmd}" doesn't need to be executed.`
     );
   } else {
     const { success, exitCode } = await executeCommand(config, {
@@ -36,5 +33,11 @@ async function main(): Promise<void> {
 }
 
 (async (): Promise<void> => {
-  await main();
+  try {
+    await main();
+  } catch (e) {
+    error("Something went wrong!");
+    error(e);
+    process.exit(1);
+  }
 })();

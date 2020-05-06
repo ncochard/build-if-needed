@@ -37,7 +37,8 @@ export interface LoadOptions {
   script: string;
 }
 
-export interface CommandOptions {
-  script: string;
+export interface DebugOptions {
   debug: boolean;
 }
+
+export type CommandOptions = LoadOptions & DebugOptions;
