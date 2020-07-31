@@ -25,7 +25,7 @@ async function main(): Promise<void> {
       debug,
     });
     if (success) {
-      await updateCache();
+      await updateCache({ script, debug });
     } else {
       process.exit(exitCode || 1);
     }
