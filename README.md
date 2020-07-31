@@ -13,18 +13,18 @@ Add this to the `package.json`...
           "build-if-needed": {
             "build": {
                 "input": [
-                    "src/**/{*.ts,*.tsx}"
+                    "src/**/*.*"
                 ],
                 "output": [
-                    "dist/**/{*.js,*.d.ts}"
+                    "dist/**/*.*"
                 ]
             },
             "build:prod": {
                 "input": [
-                    "src/**/{*.ts,*.tsx}"
+                    "src/**/*.*"
                 ],
                 "output": [
-                    "dist/**/{*.js,*.d.ts}"
+                    "dist/**/*.*"
                 ]
             }
           },
@@ -61,17 +61,6 @@ I created this utility for large applications that take a while to compile and w
 
 This is expecially useful on a large `lerna` monorepo with multiple packages. Hitting `npm run build` after going a `git pull` was too time consuming. So `npm run build:if-needed` becomes really useful to only rebuild the packages that need to be rebuilt.
 
-# Tips
-
-Pay attention to the files you specify in the `input` and `output` sections of your configuration. Calculating the MD5 hash of the `src` folder and the `dist` folder is fast, but minimizing the amount of files to scan is good idea.
-
-To ensure that the code is rebuilt whenever a new dependency is added to your `package.json`, it may be a good idea to add `package.json` to the list of `input`.
-
-    "input": [
-        "src/**/{*.ts,*.tsx}",
-        "package.json"
-    ],
-
 # Monorepo
 
 If you work on a large `lerna` monorepo, you may consider adding to the `input` a set of your package dependencies.
@@ -91,15 +80,15 @@ Given the monorepo below...
 Let's consider that `package1` has a dependency on `package2`. So you may want to add the following to `package1/package.json`. This way, this utility knows that `package1` needs to be rebuilt when `package2` is modified.
 
     "input": [
-        "src/**/{*.ts,*.tsx}",
-        "./node_modules/package2/dist/**/{*.js}" <-- Do this to indicate that package1 has a dependency on package2.
+        "src/**/*.**",
+        "./node_modules/package2/.build-if-needed/*.*" <-- Do this to indicate that package1 has a dependency on package2.
     ],
 
 Do not scan the whole `node_modules` folder. This would scan too many files, and the MD5 hash generation would take too long.
 
     "input": [
-        "src/**/{*.ts,*.tsx}",
-        "./node_modules/**/{*.js}" <-- DO NOT DO THIS!!
+        "src/**/*.**",
+        "./node_modules/**/*.*" <-- DO NOT DO THIS!!
     ],
 
 # Command line options
@@ -114,6 +103,15 @@ Do not scan the whole `node_modules` folder. This would scan too many files, and
 
 The `debug` option will output in the `.build-if-needed` folder the list of files that were scanned for updates. This can be useful to debug your configuration.
 
+
+# Tips
+
+To speed up the calculation of the MD5 hash, try to reduce the number of files that `build-if-needed` have to scan.
+
+    "input": [
+        "src/**/*.**",
+        "!**/*.map" <-- Exclude from the MD5 calculation files that are not essential to the compilation of the project.
+    ],
 
 # Configuration options
 
