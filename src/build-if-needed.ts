@@ -1,12 +1,12 @@
-import { error, info } from "./feedback";
-import { getHashForConfig, hashAlgorithm } from "./get-hash";
-import { executeCommand } from "./execute-task";
-import { findFilesForConfig } from "./file-system";
-import { getCommand } from "./command";
-import { getConfiguration } from "./configuration";
-import { loadHashes } from "./hashes-cache";
-import { same } from "./utility";
-import { updateCache } from "./after-task";
+import { error, info } from "./feedback.js";
+import { getHashForConfig, hashAlgorithm } from "./get-hash.js";
+import { executeCommand } from "./execute-task.js";
+import { findFilesForConfig } from "./file-system.js";
+import { getCommand } from "./command.js";
+import { getConfiguration } from "./configuration.js";
+import { loadHashes } from "./hashes-cache.js";
+import { same } from "./utility.js";
+import { updateCache } from "./after-task.js";
 
 async function main(): Promise<void> {
   const { script, debug } = await getCommand();

@@ -1,4 +1,4 @@
-import { Hashes } from "./types";
+import { Hashes } from "./types.js";
 
 export function same(
   value1: Hashes | undefined,

@@ -1,5 +1,5 @@
-import { Configuration, Files } from "./types";
-import globby from "globby";
+import { Configuration, Files } from "./types.js";
+import { globby } from "globby";
 
 async function findFiles(filePatters: string[]): Promise<string[]> {
   return (await globby(filePatters)).sort();

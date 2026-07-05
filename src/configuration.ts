@@ -1,7 +1,7 @@
-import { Commands, Configuration } from "./types";
+import { Commands, Configuration } from "./types.js";
 import { cosmiconfig } from "cosmiconfig";
-import { error } from "./feedback";
-import { projectName } from "./constants";
+import { error } from "./feedback.js";
+import { projectName } from "./constants.js";
 
 const defaultGlobs = ["package.json"];
 

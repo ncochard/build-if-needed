@@ -3,6 +3,10 @@
   "version": "0.1.5",
   "description": "Build your code, only if you need to...",
   "main": "dist/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
   "files": [
     "dist",
     "bin",
@@ -27,7 +31,6 @@
     "build-if-needed": "./bin/build-if-needed.js"
   },
   "devDependencies": {
-    "@types/mkdirp": "^1.0.2",
     "@types/node": "^26.1.0",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
     "@typescript-eslint/parser": "^8.62.1",
@@ -39,12 +42,12 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
-    "commander": "^6.0.0",
-    "cosmiconfig": "^6.0.0",
-    "execa": "^5.1.1",
-    "globby": "^11.0.1",
-    "mkdirp": "^1.0.4",
-    "throat": "^5.0.0"
+    "chalk": "^5.6.2",
+    "commander": "^15.0.0",
+    "cosmiconfig": "^9.0.2",
+    "execa": "^9.6.1",
+    "globby": "^16.2.0",
+    "mkdirp": "^3.0.1",
+    "throat": "^6.0.2"
   }
 }

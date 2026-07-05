@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Hashes, LoadOptions, SavedData, SaveOptions } from "./types";
-import mkdirp from "mkdirp";
-import { projectName } from "./constants";
+import { Hashes, LoadOptions, SavedData, SaveOptions } from "./types.js";
+import { mkdirp } from "mkdirp";
+import { projectName } from "./constants.js";
 
 const folder = `.${projectName}`;
 
