@@ -11,6 +11,6 @@ export async function updateCache(command: CommandOptions): Promise<void> {
   const hashes = getHashForConfig(await files, { debug });
   await saveHashes(
     { hashes: await hashes, files: await files },
-    { debug, script }
+    { debug, script },
   );
 }

@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
+        "ignoreDeprecations": "6.0",
+        "esModuleInterop": true,
         "outDir": "dist",
         "rootDir": "src",
         "module": "commonjs",

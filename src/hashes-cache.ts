@@ -1,7 +1,7 @@
 import * as fs from "fs";
-import * as mkdirp from "mkdirp";
 import * as path from "path";
 import { Hashes, LoadOptions, SavedData, SaveOptions } from "./types";
+import mkdirp from "mkdirp";
 import { projectName } from "./constants";
 
 const folder = `.${projectName}`;
@@ -15,7 +15,7 @@ const json = (data: object): string => JSON.stringify(data, null, "  ");
 
 export async function saveHashes(
   { hashes, files }: SavedData,
-  { debug, script }: SaveOptions
+  { debug, script }: SaveOptions,
 ): Promise<void> {
   await mkdirp(folder);
   if (debug) {

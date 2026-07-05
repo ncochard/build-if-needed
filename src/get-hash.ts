@@ -30,9 +30,9 @@ function getHashForFile(fileName: string): Promise<string> {
 
 async function getHashesForFiles(fileNames: string[]): Promise<string[]> {
   return await Promise.all(
-    fileNames.map(
-      (f: string): Promise<string> => throat(() => getHashForFile(f))
-    )
+    fileNames.map((f: string): Promise<string> =>
+      throat(() => getHashForFile(f)),
+    ),
   );
 }
 
@@ -51,7 +51,7 @@ async function getHashForFiles(fileNames: string[]): Promise<string> {
 
 export async function getHashForConfig(
   { input, output }: Files,
-  { debug }: DebugOptions
+  { debug }: DebugOptions,
 ): Promise<Hashes> {
   const hrstart = process.hrtime();
   try {

@@ -1,12 +1,12 @@
-import * as execa from "execa";
 import { CommandOptions, CommandResult, Configuration } from "./types";
 import { debug, error, info } from "./feedback";
+import execa from "execa";
 
 const SIGTERM = "SIGTERM";
 
 export async function executeCommand(
   config: Configuration,
-  command: CommandOptions
+  command: CommandOptions,
 ): Promise<CommandResult> {
   const cmd = `${config.command} run ${command.script}`;
   info(`Executing "${cmd}"`);
@@ -29,12 +29,13 @@ export async function executeCommand(
     info(`Completed successfully: "${cmd}"`);
     return { success: true, exitCode: result.exitCode };
   } catch (e) {
-    if (e.code) {
-      error(`Terminated with error ${e.code}: "${cmd}"`);
+    const err = e as { code?: string; exitCode?: number };
+    if (err.code) {
+      error(`Terminated with error ${err.code}: "${cmd}"`);
       return { success: false };
     } else {
       error(`Terminated with error: "${cmd}"`);
-      return { success: false, exitCode: e.code };
+      return { success: false, exitCode: err.exitCode };
     }
   } finally {
     process.off(SIGTERM, kill);

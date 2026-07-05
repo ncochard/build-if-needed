@@ -17,7 +17,7 @@ async function main(): Promise<void> {
   const cmd = `${config.command} run ${script}`;
   if (same(newHashes, lastHashes)) {
     info(
-      `The stored ${hashAlgorithm} indicates that "${cmd}" doesn't need to be executed.`
+      `The stored ${hashAlgorithm} indicates that "${cmd}" doesn't need to be executed.`,
     );
   } else {
     const { success, exitCode } = await executeCommand(config, {
@@ -37,7 +37,7 @@ async function main(): Promise<void> {
     await main();
   } catch (e) {
     error("Something went wrong!");
-    error(e);
+    error(e instanceof Error ? e.message : String(e));
     process.exit(1);
   }
 })();
