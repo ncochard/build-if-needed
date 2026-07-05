@@ -1,17 +1,18 @@
-import { CommandOptions } from "./types";
-import { error } from "./feedback";
+import { CommandOptions } from "./types.js";
+import { error } from "./feedback.js";
 import { program } from "commander";
 
 export async function getCommand(): Promise<CommandOptions> {
   await Promise.resolve();
   program.requiredOption(
     "-n, --script <script>",
-    "name of the script configuration"
+    "name of the script configuration",
   );
   program.option("-d, --debug", "outputs debugging information");
   program.parse(process.argv);
-  const script = `${program.script}`;
-  const debug: boolean = program.debug === true;
+  const opts = program.opts();
+  const script = `${opts.script}`;
+  const debug: boolean = opts.debug === true;
   if (!script) {
     error(`Missing --script parameter`);
   }

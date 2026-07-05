@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../dist/build-if-needed');
+import "../dist/build-if-needed.js";

@@ -1,10 +1,17 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
-import { DebugOptions, Files, Hashes } from "./types";
-import { info } from "./feedback";
-import throatFactory from "throat";
+import { DebugOptions, Files, Hashes } from "./types.js";
+import { info } from "./feedback.js";
+import throatFactoryRaw from "throat";
 
 export const hashAlgorithm = "md5";
+
+// throat's type declarations don't resolve correctly under "nodenext" module
+// resolution (its .d.ts uses ESM "export default" syntax for a CJS module);
+// the runtime export is unaffected, so a cast is needed here.
+const throatFactory = throatFactoryRaw as unknown as (
+  size: number,
+) => <T>(fn: () => Promise<T>) => Promise<T>;
 
 const MAX_NUMBER_OF_FILES_CONCURENTLY_OPENED = 50;
 const throat = throatFactory(MAX_NUMBER_OF_FILES_CONCURENTLY_OPENED);
@@ -30,9 +37,9 @@ function getHashForFile(fileName: string): Promise<string> {
 
 async function getHashesForFiles(fileNames: string[]): Promise<string[]> {
   return await Promise.all(
-    fileNames.map(
-      (f: string): Promise<string> => throat(() => getHashForFile(f))
-    )
+    fileNames.map((f: string): Promise<string> =>
+      throat(() => getHashForFile(f)),
+    ),
   );
 }
 
@@ -51,7 +58,7 @@ async function getHashForFiles(fileNames: string[]): Promise<string> {
 
 export async function getHashForConfig(
   { input, output }: Files,
-  { debug }: DebugOptions
+  { debug }: DebugOptions,
 ): Promise<Hashes> {
   const hrstart = process.hrtime();
   try {

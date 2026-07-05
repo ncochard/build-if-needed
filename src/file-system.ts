@@ -1,12 +1,12 @@
-import * as globby from "globby";
-import { Configuration, Files } from "./types";
+import { Configuration, Files } from "./types.js";
+import { globby } from "globby";
 
 async function findFiles(filePatters: string[]): Promise<string[]> {
   return (await globby(filePatters)).sort();
 }
 
 export async function findFilesForConfig(
-  config: Configuration
+  config: Configuration,
 ): Promise<Files> {
   const input = findFiles(config.input);
   const output = findFiles(config.output);

@@ -1,5 +1,7 @@
-import { bold, dim } from "chalk";
-import { projectName } from "./constants";
+import chalk from "chalk";
+import { projectName } from "./constants.js";
+
+const { bold, dim } = chalk;
 
 const n = bold(`[${projectName}]`);
 const f = dim(`(${process.cwd()})`);

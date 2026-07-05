@@ -2,16 +2,13 @@
     "compilerOptions": {
         "outDir": "dist",
         "rootDir": "src",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "target": "es5",
-        "lib": ["es6", "dom", "es2018.intl"],
+        "module": "nodenext",
+        "target": "es2023",
+        "lib": ["es2023"],
         "declaration": true,
         "strict": true,
-        "resolveJsonModule": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "preserveConstEnums": true
+        "noUnusedParameters": true
     },
     "include": ["src/*.ts"]
 }

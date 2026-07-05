@@ -1,7 +1,7 @@
-import { Commands, Configuration } from "./types";
+import { Commands, Configuration } from "./types.js";
 import { cosmiconfig } from "cosmiconfig";
-import { error } from "./feedback";
-import { projectName } from "./constants";
+import { error } from "./feedback.js";
+import { projectName } from "./constants.js";
 
 const defaultGlobs = ["package.json"];
 
@@ -15,7 +15,7 @@ export async function getConfiguration(script: string): Promise<Configuration> {
   const result = configResult.config[script];
   if (!result) {
     error(
-      `The configuration section "${projectName}" in the package.json is missing the definition of the script "${script}". [${configResult.filepath}]`
+      `The configuration section "${projectName}" in the package.json is missing the definition of the script "${script}". [${configResult.filepath}]`,
     );
     process.exit(1);
   }
